@@ -6,7 +6,11 @@ exports.createSauce = (req, res, next) => {
     delete sauceObject._id;
     const sauce = new Sauce({
         ...sauceObject,
-        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
+        likes: 0,
+        dislikes: 0,
+        usersliked: [],
+        usersdisliked: []
     });
     sauce.save()
         .then(() => res.status(201).json({ message: 'Objet enregistré !' }))
@@ -19,7 +23,6 @@ exports.getOneSauce = (req, res, next) => {
     }).then(
         (sauce) => {
             res.status(200).json(sauce);
-            console.log(sauce);
         }
     ).catch(
         (error) => {
@@ -65,4 +68,25 @@ exports.getAllSauce = (req, res, next) => {
             });
         }
     );
+};
+
+exports.likeSauce = (req, res, next) => {
+    Sauce.findOne({ _id: req.params.id })
+        .then((sauce) => {
+            if (sauce.usersliked == undefined) {
+                Sauce.updateOne({ _id: req.params.id }, {
+                    $inc: { likes: 1 },
+                    $push: ({
+                        $usersLiked: sauceObject.userId,
+                        $_id: sauce.id
+                    })
+                })
+            }
+            const sauceObject = req.file ? {
+                ...JSON.parse(req.body.sauce),
+            } : {...req.body };
+            const like = sauceObject.like;
+            const userId = sauceObject.userId
+            console.log(sauce.usersliked)
+        })
 };
