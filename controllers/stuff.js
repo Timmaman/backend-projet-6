@@ -6,7 +6,7 @@ exports.createSauce = (req, res, next) => {
     delete sauceObject._id;
     const sauce = new Sauce({
         ...sauceObject,
-        image: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     });
     sauce.save()
         .then(() => res.status(201).json({ message: 'Objet enregistré !' }))
@@ -19,6 +19,7 @@ exports.getOneSauce = (req, res, next) => {
     }).then(
         (sauce) => {
             res.status(200).json(sauce);
+            console.log(sauce);
         }
     ).catch(
         (error) => {
@@ -56,7 +57,6 @@ exports.getAllSauce = (req, res, next) => {
     Sauce.find().then(
         (sauces) => {
             res.status(200).json(sauces);
-            console.log(sauces)
         }
     ).catch(
         (error) => {
