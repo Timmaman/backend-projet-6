@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
+
 const User = require('../models/user');
 
 exports.signup = (req, res, next) => {
@@ -18,10 +19,8 @@ exports.signup = (req, res, next) => {
             })
             .catch(error => res.status(500).json({ error }));
     } else {
-        res.status(401).json({ message: 'Votre mot de passe doit au moins faire 8 caractères' })
+        res.status(401).json({ message: 'Votre mot de passe doit au moins faire 8 caractères' });
     }
-
-
 };
 
 exports.login = (req, res, next) => {
