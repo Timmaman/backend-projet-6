@@ -2,6 +2,8 @@ const Sauce = require('../models/sauces');
 const fs = require('fs');
 const regex = /[a-zA-Z]/;
 
+
+// Ajouter une sauce
 exports.createSauce = (req, res) => {
     const sauceObject = JSON.parse(req.body.sauce);
     if (!regex.test(sauceObject.name, sauceObject.manufacturer, sauceObject.description, sauceObject.mainPepper)) {
@@ -22,6 +24,7 @@ exports.createSauce = (req, res) => {
     }
 };
 
+// Afficher une sauce
 exports.getOneSauce = (req, res) => {
     Sauce.findOne({
         _id: req.params.id
@@ -36,6 +39,7 @@ exports.getOneSauce = (req, res) => {
     );
 };
 
+// Modifier une sauce
 exports.modifySauce = (req, res) => {
     const sauceObject = req.file ? {
         ...JSON.parse(req.body.sauce),
@@ -54,6 +58,7 @@ exports.modifySauce = (req, res) => {
     }
 };
 
+// Supprimer une sauce
 exports.deleteSauce = (req, res) => {
     Sauce.findOne({ _id: req.params.id })
         .then(sauce => {
@@ -67,12 +72,14 @@ exports.deleteSauce = (req, res) => {
         .catch(error => res.status(500).json({ error }));
 };
 
+// Afficher toutes les sauces
 exports.getAllSauce = (req, res) => {
     Sauce.find()
         .then((sauces) => { res.status(200).json(sauces); })
         .catch((error) => { res.status(400).json({ error: error }); });
 };
 
+// Liker une sauce
 exports.likeSauce = (req, res) => {
     const sauceLiked = req.file ? {
         ...JSON.parse(req.body.sauce),

@@ -1,9 +1,9 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-
 const User = require('../models/user');
 
+//Création d'un utilisateur
 exports.signup = (req, res, next) => {
     const count = req.body.password.length;
     if (count >= 8) {
@@ -23,6 +23,7 @@ exports.signup = (req, res, next) => {
     }
 };
 
+//Connexion d'un utilisateur déjà inscrit
 exports.login = (req, res, next) => {
     User.findOne({ email: req.body.email })
         .then(user => {
